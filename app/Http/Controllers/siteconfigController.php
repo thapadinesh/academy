@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
+use App\Models\siteconfig;
 
-class CourseController extends Controller
+class siteconfigController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +14,11 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = new Course;
-        $course = $courses->latest()->paginate(10);
+        $siteconfig = new siteconfig;
+        $siteconfig = $siteconfig->latest()->paginate(10);
 
-        return view('admin.courses.index',compact('courses'));
+        return view('admin.siteconfig.index',compact('siteconfig'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -27,7 +26,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('admin.courses.create');
+        return view('admin.siteconfig.create');
     }
 
     /**
@@ -38,8 +37,17 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $siteconfig = new siteconfig;
+        $siteconfig->name = $request->name;
+        $siteconfig->site_key = $request->site_key;
+        $siteconfig->site_value = $request->site_value;
+
+        $siteconfig->save();
+
+        return redirect('admin/siteconfig')->with('message','Record is created successfully.');
+
     }
+    
 
     /**
      * Display the specified resource.
@@ -51,8 +59,7 @@ class CourseController extends Controller
     {
         //
     }
-
-    /**
+       /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -60,7 +67,11 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $siteconfig = new siteconfig;
+        $siteconfig = $siteconfig->where('id',$id)->first();
+
+        return view('admin.siteconfig.create',compact('siteconfig'));
+
     }
 
     /**
@@ -72,7 +83,15 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $siteconfig = new siteconfig;
+        $siteconfig = $siteconfig->where('id',$id)->first();
+        $siteconfig->name = $request->name;
+        $siteconfig->site_key = $request->site_key;
+        $siteconfig->site_value = $request->site_value;
+
+        $siteconfig->save();
+
+        return redirect('admin/$siteconfig')->with('message','Record is created successfully.');
     }
 
     /**
@@ -83,6 +102,11 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $siteconfig = new siteconfig;
+        $siteconfig = $siteconfig->where('id',$id)->first();
+
+        $siteconfig->delete();
+
+        return redirect('admin/siteconfig')->with('Record is deleted successfully.');
     }
 }

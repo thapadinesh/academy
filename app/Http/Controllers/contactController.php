@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
-
-class CourseController extends Controller
+use App\Models\contact;
+class contactController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +13,10 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = new Course;
-        $course = $courses->latest()->paginate(10);
+        $contact = new contact;
+        $contact = $contact->latest()->paginate(10);
 
-        return view('admin.courses.index',compact('courses'));
+        return view('admin.contact.index',compact('contact'));
     }
 
     /**
@@ -27,7 +26,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('admin.courses.create');
+        return view('admin.contact.create');
     }
 
     /**
@@ -38,7 +37,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $contact = new contact;
+        $contact->name = $request->name;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        $contact->subject = $request->subject;
+        $contact->message = $request->message;
+
+        $contact->save();
+
+        return redirect('admin/contact')->with('message','Record is created successfully.');
     }
 
     /**
@@ -52,7 +60,7 @@ class CourseController extends Controller
         //
     }
 
-    /**
+       /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -60,7 +68,11 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $contact = new contact;
+        $contact = $contact->where('id',$id)->first();
+
+        return view('admin.contact.create',compact('contact'));
+
     }
 
     /**
@@ -72,7 +84,17 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $contact = new contact;
+        $contact = $contact->where('id',$id)->first();
+        $contact->name = $request->name;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        $contact->subject = $request->subject;
+        $contact->message = $request->message;
+
+        $contact->save();
+
+        return redirect('admin/contact')->with('message','Record is created successfully.');
     }
 
     /**

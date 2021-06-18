@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
-
-class CourseController extends Controller
+use App\Models\page;
+class pageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +13,10 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = new Course;
-        $course = $courses->latest()->paginate(10);
+        $page = new page;
+        $page = $page->latest()->paginate(10);
 
-        return view('admin.courses.index',compact('courses'));
+        return view('admin.page.index',compact('page'));
     }
 
     /**
@@ -27,7 +26,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('admin.courses.create');
+        return view('admin.page.create');
     }
 
     /**
@@ -38,7 +37,15 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $page = new page;
+        $page->name = $request->name;
+        $page->slug = $request->slug;
+        $page->feature_img = $request->feature_img;
+        $page->content = $request->content;
+
+        $page->save();
+
+        return redirect('admin/page')->with('message','Record is created successfully.');
     }
 
     /**
@@ -51,8 +58,7 @@ class CourseController extends Controller
     {
         //
     }
-
-    /**
+       /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -60,7 +66,11 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = new page;
+        $page = $page->where('id',$id)->first();
+
+        return view('admin.page.create',compact('page'));
+
     }
 
     /**
@@ -72,7 +82,16 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $page = new page;
+        $page = $page->where('id',$id)->first();
+        $page->name = $request->name;
+        $page->slug = $request->slug;
+        $page->feature_img = $request->feature_img;
+        $page->content = $request->content;
+
+        $page->save();
+
+        return redirect('admin/page')->with('message','Record is created successfully.');
     }
 
     /**
@@ -83,6 +102,11 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $page = new page;
+        $page = $page->where('id',$id)->first();
+
+        $page->delete();
+
+        return redirect('admin/page')->with('Record is deleted successfully.');
     }
 }
